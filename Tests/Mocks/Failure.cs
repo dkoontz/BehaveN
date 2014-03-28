@@ -3,7 +3,7 @@ using BehaveN;
 
 namespace Tests {
 	public class Failure : Task {
-		protected override TaskResult Update(Context context) {
+		protected override TaskResult Update(Blackboard blackboard) {
 			return TaskResult.Failure;
 		}
 	}

@@ -8,39 +8,39 @@ namespace Tests {
 
 		[Test]
 		public void Action_returns_result_from_delegate() {
-			var action = new ActionRunner( context => TaskResult.Success );
-			Assert.AreEqual(TaskResult.Success, action.Tick(new Context()));
+			var action = new ActionRunner( Blackboard => TaskResult.Success );
+			Assert.AreEqual(TaskResult.Success, action.Tick(new Blackboard()));
 
-			action = new ActionRunner( context => TaskResult.Failure );
-			Assert.AreEqual(TaskResult.Failure, action.Tick(new Context()));
+			action = new ActionRunner( Blackboard => TaskResult.Failure );
+			Assert.AreEqual(TaskResult.Failure, action.Tick(new Blackboard()));
 
-			action = new ActionRunner( context => TaskResult.Running );
-			Assert.AreEqual(TaskResult.Running, action.Tick(new Context()));
+			action = new ActionRunner( Blackboard => TaskResult.Running );
+			Assert.AreEqual(TaskResult.Running, action.Tick(new Blackboard()));
 		}
 
 		[Test]
 		public void Action_invokes_delegate_when_tick_is_called() {
 			bool wasCalled = false;
-			var action = new ActionRunner( context => {
+			var action = new ActionRunner( Blackboard => {
 				wasCalled = true;
 				return TaskResult.Success;
 			});
-			action.Tick(new Context());
+			action.Tick(new Blackboard());
 			Assert.AreEqual(true, wasCalled);
 		}
 
 		[Test]
-		public void Action_has_access_to_context_variables() {
-			var context = new Context();
-			context.Set("score", 10);
+		public void Action_has_access_to_Blackboard_variables() {
+			var Blackboard = new Blackboard();
+			Blackboard.Set("score", 10);
 
 			var action = new ActionRunner(ctx => {
 				ctx.Set("score", ctx.Get<int>("score") + 1);
 				return TaskResult.Success;
 			});
-			action.Tick(context);
+			action.Tick(Blackboard);
 
-			Assert.AreEqual(11, context.Get<int>("score"));
+			Assert.AreEqual(11, Blackboard.Get<int>("score"));
 		}
 	}
 }

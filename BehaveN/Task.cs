@@ -3,34 +3,27 @@ using System.Collections.Generic;
 
 namespace BehaveN
 {
-	public enum TaskResult {
-		NotInitialized,
-		Running,
-		Success,
-		Failure,
-	}
-
-	public abstract class Task
+	public abstract class Task : ITask
 	{
 		TaskResult status = TaskResult.NotInitialized;
 
-		public TaskResult Tick(Context context) {
+		public TaskResult Tick(Blackboard blackboard) {
 			if (status == TaskResult.NotInitialized) {
-				OnInitialize();
+				OnInitialize(blackboard);
 			}
 
-			status = Update(context);
+			status = Update(blackboard);
 
 			if (status != TaskResult.Running) {
-				OnMovingToNextNode(status);
+				OnReset(blackboard);
 			}
 
 			return status;
 		}
 
-		public virtual void OnInitialize() { }
-		public virtual void OnMovingToNextNode(TaskResult status) { }
+		public virtual void OnInitialize(Blackboard blackboard) { }
+		public virtual void OnReset(Blackboard blackboard) { }
 
-		protected abstract TaskResult Update(Context context);
+		protected abstract TaskResult Update(Blackboard blackboard);
 	}
 }

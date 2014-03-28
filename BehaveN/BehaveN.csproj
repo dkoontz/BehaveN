@@ -37,8 +37,10 @@
     <Compile Include="Composites\Selector.cs" />
     <Compile Include="Composites\Sequence.cs" />
     <Compile Include="Actions\ActionRunner.cs" />
-    <Compile Include="Context.cs" />
     <Compile Include="Task.cs" />
+    <Compile Include="Blackboard.cs" />
+    <Compile Include="ITask.cs" />
+    <Compile Include="IBehaviorTree.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

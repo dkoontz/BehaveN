@@ -2,14 +2,14 @@ using System;
 
 namespace BehaveN {
 	public class ActionRunner : Task {
-		Func<Context, TaskResult> action;
+		Func<Blackboard, TaskResult> action;
 
-		public ActionRunner(Func<Context, TaskResult> action) {
+		public ActionRunner(Func<Blackboard, TaskResult> action) {
 			this.action = action;
 		}
 
-		protected override TaskResult Update(Context context) {
-			return action(context);
+		protected override TaskResult Update(Blackboard blackboard) {
+			return action(blackboard);
 		}
 	}
 }
