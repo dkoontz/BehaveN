@@ -10,8 +10,16 @@ namespace BehaveN
 			values = new Dictionary<string, object>();
 		}
 
-		public Blackboard(Dictionary<string, object> initialValues) {
-			values = new Dictionary<string, object>(initialValues);
+		public Blackboard(Dictionary<string, object> initialValues) : this() {
+			foreach (var kvp in initialValues) {
+				Set(kvp.Key, kvp.Value);
+			}
+		}
+
+		public Blackboard(Dictionary<Enum, object> initialValues) : this() {
+			foreach (var kvp in initialValues) {
+				Set(kvp.Key, kvp.Value);
+			}
 		}
 
 		public T Get<T>(Enum name) {
@@ -49,7 +57,15 @@ namespace BehaveN
 			values[name] = value;
 		}
 
-		string EnumValueToString(Enum value) {
+		public bool HasVariable(Enum name) {
+			return HasVariable(EnumValueToString(name));
+		}
+
+		public bool HasVariable(string name) {
+			return values.ContainsKey(name);
+		}
+
+		protected static string EnumValueToString(Enum value) {
 			return string.Format("{0}.{1}", value.GetType(), value);
 		}
 	}

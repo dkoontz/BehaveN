@@ -5,12 +5,20 @@ namespace BehaveN {
 		protected Blackboard Blackboard { get; private set; }
 		protected ITask RootNode { get; set; }
 
-		public BehaviorTree() {
-			Blackboard = new Blackboard();
+		public BehaviorTree() : this(new Blackboard()) { }
+
+		public BehaviorTree(Blackboard blackboard) {
+			Blackboard = blackboard;
 		}
 
-		public virtual void Tick() {
-			RootNode.Tick(Blackboard);
+		public BehaviorTree(ITask rootNode) : this(rootNode, null) { }
+
+		public BehaviorTree(ITask rootNode, Blackboard blackboard) : this(blackboard) {
+			RootNode = rootNode;
+		}
+
+		public virtual TaskResult Tick() {
+			return RootNode.Tick(Blackboard);
 		}
 
 		public void SetBlackboardValue(Enum name, object value) {
