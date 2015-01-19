@@ -20,12 +20,12 @@ namespace BehaveN {
 			atEndOfList = false;
 		}
 
+		public override void OnReset(Blackboard blackboard) {
+			OnInitialize(blackboard);
+		}
+
 		protected override TaskResult Update(Blackboard blackboard) {
 			TaskResult currentStatus = TaskResult.Failure;
-
-			if (previousStatus == TaskResult.Success || atEndOfList) {
-				OnInitialize(blackboard);
-			}
 
 			if (previousStatus == TaskResult.Running) {
 				currentStatus = childEnumerator.Current.Tick(blackboard);

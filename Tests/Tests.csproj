@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0CB842A8-D408-4F0B-A5DD-AC868031DA40}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -47,6 +47,8 @@
     <Compile Include="Mocks\FailureCounter.cs" />
     <Compile Include="Mocks\Failure.cs" />
     <Compile Include="Mocks\Success.cs" />
+    <Compile Include="ParallelSelectorTests.cs" />
+    <Compile Include="ParallelSequenceTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

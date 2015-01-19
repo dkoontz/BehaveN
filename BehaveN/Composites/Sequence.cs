@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace BehaveN {
@@ -21,12 +20,12 @@ namespace BehaveN {
 			atEndOfList = false;
 		}
 
+		public override void OnReset(Blackboard blackboard) {
+			OnInitialize(blackboard);
+		}
+
 		protected override TaskResult Update(Blackboard blackboard) {
 			TaskResult currentStatus = TaskResult.Success;
-
-			if (previousStatus == TaskResult.Failure || atEndOfList) {
-				OnInitialize(blackboard);
-			}
 
 			if (previousStatus == TaskResult.Running) {
 				currentStatus = childEnumerator.Current.Tick(blackboard);

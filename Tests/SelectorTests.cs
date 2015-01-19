@@ -13,7 +13,7 @@ namespace Tests {
 		}
 
 		[Test]
-		public void Selector_returns_success_if_first_non_failing_child_returns_success() {
+		public void Selector_returns_success_when_a_child_returns_success() {
 			var selector = new Selector(new Success());
 			Assert.AreEqual(TaskResult.Success, selector.Tick(new Blackboard()));
 
@@ -25,7 +25,7 @@ namespace Tests {
 		}
 
 		[Test]
-		public void Selector_returns_running_if_first_non_failing_child_returns_running() {
+		public void Selector_returns_running_when_a_child_returns_running() {
 			var selector = new Selector(new Running());
 			Assert.AreEqual(TaskResult.Running, selector.Tick(new Blackboard()));
 
@@ -60,11 +60,11 @@ namespace Tests {
 			var failureCounter = new FailureCounter();
 			var runningCounter = new RunningCounter();
 			var selector = new Selector(failureCounter, runningCounter);
-			var Blackboard = new Blackboard();
-			selector.Tick(Blackboard);
+			var blackboard = new Blackboard();
+			selector.Tick(blackboard);
 			failureCounter.Count.ShouldEqual(1);
 			runningCounter.Count.ShouldEqual(1);
-			selector.Tick(Blackboard);
+			selector.Tick(blackboard);
 			failureCounter.Count.ShouldEqual(1);
 			runningCounter.Count.ShouldEqual(2);
 		}
@@ -74,11 +74,11 @@ namespace Tests {
 			var failCounter = new FailureCounter();
 			var failCounter2 = new FailureCounter();
 			var selector = new Selector(failCounter, failCounter2);
-			var Blackboard = new Blackboard();
-			selector.Tick(Blackboard);
+			var blackboard = new Blackboard();
+			selector.Tick(blackboard);
 			failCounter.Count.ShouldEqual(1);
 			failCounter2.Count.ShouldEqual(1);
-			selector.Tick(Blackboard);
+			selector.Tick(blackboard);
 			failCounter.Count.ShouldEqual(2);
 			failCounter2.Count.ShouldEqual(2);
 		}

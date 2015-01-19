@@ -5,20 +5,28 @@ namespace BehaveN
 {
 	public abstract class Task : ITask
 	{
-		TaskResult status = TaskResult.NotInitialized;
+		public TaskResult Status { get; private set; }
+
+		protected Task() {
+			Status = TaskResult.NotInitialized;
+		}
 
 		public TaskResult Tick(Blackboard blackboard) {
-			if (status == TaskResult.NotInitialized) {
+			if (Status == TaskResult.NotInitialized) {
 				OnInitialize(blackboard);
 			}
 
-			status = Update(blackboard);
+			Status = Update(blackboard);
 
-			if (status != TaskResult.Running) {
+			if (Status != TaskResult.Running) {
 				OnReset(blackboard);
 			}
 
-			return status;
+			return Status;
+		}
+
+		public virtual void ForcedReset(Blackboard blackboard) {
+			OnReset(blackboard);
 		}
 
 		public virtual void OnInitialize(Blackboard blackboard) { }
