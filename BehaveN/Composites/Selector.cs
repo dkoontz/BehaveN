@@ -1,46 +1,24 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace BehaveN {
-	/// <summary>
-	/// Runs each Behavior until one return Success or Running.
-	/// Returns Failure if no Behaviors return Success.
-	/// </summary>
-	public class Selector : Composite {
-		List<Task>.Enumerator childEnumerator;
-		TaskResult previousStatus;
-		bool atEndOfList;
-
-		public Selector(params Task[] behaviors) {
-			children = new List<Task>(behaviors);
+	public static class Selector {
+		public static Node Node(params Node[] nodes) {
+			return new Node {
+				OnTick = Tick(nodes)
+			};
 		}
 
-		public override void OnInitialize(Blackboard blackboard) {
-			childEnumerator = children.GetEnumerator();
-			atEndOfList = false;
-		}
-
-		public override void OnReset(Blackboard blackboard) {
-			OnInitialize(blackboard);
-		}
-
-		protected override TaskResult Update(Blackboard blackboard) {
-			TaskResult currentStatus = TaskResult.Failure;
-
-			if (previousStatus == TaskResult.Running) {
-				currentStatus = childEnumerator.Current.Tick(blackboard);
-				previousStatus = currentStatus;
-			}
-
-			while (currentStatus == TaskResult.Failure && !atEndOfList) {
-				atEndOfList = !childEnumerator.MoveNext();
-				if (!atEndOfList) {
-					currentStatus = childEnumerator.Current.Tick(blackboard);
-					previousStatus = currentStatus;
+		public static TickFunction Tick(params Node[] nodes) {
+			return (nodeDictionary, nodeState) => {
+				foreach (var node in nodes) {
+					var status = BehaviorTree.Run(node, nodeDictionary);
+					if (status == NodeStatus.Running || status == NodeStatus.Success) {
+						return status;
+					}
 				}
-			}
 
-			return currentStatus;
+				return NodeStatus.Failure;
+			};
 		}
 	}
 }

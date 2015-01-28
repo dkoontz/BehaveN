@@ -34,21 +34,8 @@
       <HintPath>..\libs\NUnit.Should.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ActionTests.cs" />
-    <Compile Include="SequenceTests.cs" />
-    <Compile Include="SelectorTests.cs" />
-    <Compile Include="Mocks\RunningCounter.cs" />
-    <Compile Include="Mocks\SuccessCounter.cs" />
-    <Compile Include="Mocks\Running.cs" />
-    <Compile Include="Mocks\FailureCounter.cs" />
-    <Compile Include="Mocks\Failure.cs" />
-    <Compile Include="Mocks\Success.cs" />
-    <Compile Include="ParallelSelectorTests.cs" />
-    <Compile Include="ParallelSequenceTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -62,5 +49,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Mocks\Mocks.cs" />
+    <Compile Include="InverterTests.cs" />
+    <Compile Include="ResumingSequenceTests.cs" />
+    <Compile Include="SequenceTests.cs" />
+    <Compile Include="SelectorTests.cs" />
+    <Compile Include="ResumingSelectorTests.cs" />
   </ItemGroup>
 </Project>

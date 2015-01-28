@@ -5,29 +5,28 @@ using BehaveN;
 
 namespace Tests {
 	[TestFixture]
-	public class SequenceTests {
-
+	public class ResumingSequenceTests {
 		[Test]
-		public void Sequence_returns_success_with_zero_children() {
-			var sequence = Sequence.Node();
+		public void ResumingSequence_returns_success_with_zero_children() {
+			var sequence = ResumingSequence.Node();
 			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Success);
 		}
 
 		[Test]
-		public void Sequence_returns_success_with_one_succeeding_child() {
-			var sequence = Sequence.Node(Mocks.AlwaysSucceedsNode);
+		public void ResumingSequence_returns_success_with_one_succeeding_child() {
+			var sequence = ResumingSequence.Node(Mocks.AlwaysSucceedsNode);
 			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Success);
 		}
 
 		[Test]
-		public void Sequence_returns_failure_with_one_failing_child() {
-			var sequence = Sequence.Node(Mocks.AlwaysFailsNode);
+		public void ResumingSequence_returns_failure_with_one_failing_child() {
+			var sequence = ResumingSequence.Node(Mocks.AlwaysFailsNode);
 			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Failure);
 		}
 
 		[Test]
-		public void Sequence_returns_running_with_one_running_child() {
-			var sequence = Sequence.Node(Mocks.AlwaysRunningNode);
+		public void ResumingSequence_returns_running_with_one_running_child() {
+			var sequence = ResumingSequence.Node(Mocks.AlwaysRunningNode);
 			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Running);
 		}
 
@@ -66,6 +65,31 @@ namespace Tests {
 										 counter);
 			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Failure);
 			callCount[0].ShouldEqual(2);
+		}
+
+		[Test]
+		public void ResumingSequence_resumes_on_running_node() {
+			var sequence = ResumingSequence.Node(Mocks.AlwaysSucceedsNode, 
+												 Mocks.AlwaysSucceedsNode, 
+												 Mocks.RunningOnceNode,
+												 Mocks.AlwaysFailsNode);
+			var dictionary = Mocks.EmptyDictionary;
+
+			BehaviorTree.Run(sequence, dictionary).ShouldEqual(NodeStatus.Running);
+			BehaviorTree.Run(sequence, dictionary).ShouldEqual(NodeStatus.Failure);
+		}
+
+		[Test]
+		public void ResumingSequence_does_not_resume_on_failing_node() {
+			var sequence = ResumingSequence.Node(Mocks.AlwaysSucceedsNode, 
+												 Mocks.AlwaysSucceedsNode, 
+												 Mocks.FailOnceNode,
+												 Mocks.AlwaysRunningNode);
+			var dictionary = Mocks.EmptyDictionary;
+
+			BehaviorTree.Run(sequence, dictionary).ShouldEqual(NodeStatus.Failure);
+			BehaviorTree.Run(sequence, dictionary).ShouldEqual(NodeStatus.Failure);
+			BehaviorTree.Run(sequence, dictionary).ShouldEqual(NodeStatus.Failure);
 		}
 	}
 }

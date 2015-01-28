@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using BehaveN;
 
@@ -8,79 +9,64 @@ namespace Tests {
 
 		[Test]
 		public void Selector_returns_failure_with_zero_children() {
-			var selector = new Selector();
-			Assert.AreEqual(TaskResult.Failure, selector.Tick(new Blackboard()));
+			var sequence = Selector.Node();
+			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Failure);
 		}
 
 		[Test]
-		public void Selector_returns_success_when_a_child_returns_success() {
-			var selector = new Selector(new Success());
-			Assert.AreEqual(TaskResult.Success, selector.Tick(new Blackboard()));
-
-			selector = new Selector(new Failure(), new Success());
-			Assert.AreEqual(TaskResult.Success, selector.Tick(new Blackboard()));
-
-			selector = new Selector(new Running(), new Success());
-			Assert.AreNotEqual(TaskResult.Success, selector.Tick(new Blackboard()));
+		public void Selector_returns_success_with_one_succeeding_child() {
+			var sequence = Selector.Node(Mocks.AlwaysSucceedsNode);
+			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Success);
 		}
 
 		[Test]
-		public void Selector_returns_running_when_a_child_returns_running() {
-			var selector = new Selector(new Running());
-			Assert.AreEqual(TaskResult.Running, selector.Tick(new Blackboard()));
-
-			selector = new Selector(new Failure(), new Running());
-			Assert.AreEqual(TaskResult.Running, selector.Tick(new Blackboard()));
-
-			selector = new Selector(new Success(), new Running());
-			Assert.AreNotEqual(TaskResult.Running, selector.Tick(new Blackboard()));
+		public void Selector_returns_failure_with_one_failing_child() {
+			var sequence = Selector.Node(Mocks.AlwaysFailsNode);
+			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Failure);
 		}
 
 		[Test]
-		public void Selector_runs_all_behaviors_until_success_or_running_result() {
-			var counter1 = new FailureCounter();
-			var counter2 = new FailureCounter();
-
-			var selector = new Selector(counter1, new Success(), counter2);
-			selector.Tick(new Blackboard());
-			Assert.AreEqual(1, counter1.Count);
-			Assert.AreEqual(0, counter2.Count);
-
-			counter1 = new FailureCounter();
-			counter2 = new FailureCounter();
-
-			selector = new Selector(counter1, new Running(), counter2);
-			selector.Tick(new Blackboard());
-			Assert.AreEqual(1, counter1.Count);
-			Assert.AreEqual(0, counter2.Count);
+		public void Selector_returns_running_with_one_running_child() {
+			var sequence = Selector.Node(Mocks.AlwaysRunningNode);
+			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Running);
 		}
 
 		[Test]
-		public void Selector_resumes_at_running_node() {
-			var failureCounter = new FailureCounter();
-			var runningCounter = new RunningCounter();
-			var selector = new Selector(failureCounter, runningCounter);
-			var blackboard = new Blackboard();
-			selector.Tick(blackboard);
-			failureCounter.Count.ShouldEqual(1);
-			runningCounter.Count.ShouldEqual(1);
-			selector.Tick(blackboard);
-			failureCounter.Count.ShouldEqual(1);
-			runningCounter.Count.ShouldEqual(2);
+		public void Selector_continues_past_failing_nodes() {
+			var callCount = new int[1];
+			var counter = Mocks.FailCounterNode(callCount);
+			var sequence = Selector.Node(counter, 
+										 counter, 
+										 counter, 
+										 counter);
+			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Failure);
+			callCount[0].ShouldEqual(4);
 		}
 
 		[Test]
-		public void Selector_starts_at_first_node_on_next_tick_after_all_nodes_fail() {
-			var failCounter = new FailureCounter();
-			var failCounter2 = new FailureCounter();
-			var selector = new Selector(failCounter, failCounter2);
-			var blackboard = new Blackboard();
-			selector.Tick(blackboard);
-			failCounter.Count.ShouldEqual(1);
-			failCounter2.Count.ShouldEqual(1);
-			selector.Tick(blackboard);
-			failCounter.Count.ShouldEqual(2);
-			failCounter2.Count.ShouldEqual(2);
+		public void Selector_stops_at_success_nodes() {
+			var callCount = new int[1];
+			var counter = Mocks.FailCounterNode(callCount);
+			var sequence = Selector.Node(counter, 
+										 counter, 
+										 counter, 
+										 Mocks.AlwaysSucceedsNode, 
+										 counter);
+			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Success);
+			callCount[0].ShouldEqual(3);
+		}
+
+		[Test]
+		public void Selector_stops_at_running_nodes() {
+			var callCount = new int[1];
+			var counter = Mocks.FailCounterNode(callCount);
+			var sequence = Selector.Node(counter, 
+										 counter, 
+										 counter, 
+										 Mocks.AlwaysRunningNode, 
+										 counter);
+			BehaviorTree.Run(sequence, Mocks.EmptyDictionary).ShouldEqual(NodeStatus.Running);
+			callCount[0].ShouldEqual(3);
 		}
 	}
 }

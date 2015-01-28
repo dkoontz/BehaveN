@@ -31,23 +31,18 @@
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BehaviorTree.cs" />
-    <Compile Include="Composite.cs" />
-    <Compile Include="Composites\Selector.cs" />
-    <Compile Include="Composites\Sequence.cs" />
-    <Compile Include="Actions\ActionRunner.cs" />
-    <Compile Include="Task.cs" />
-    <Compile Include="Blackboard.cs" />
-    <Compile Include="ITask.cs" />
-    <Compile Include="IBehaviorTree.cs" />
-    <Compile Include="Composites\ParallelSelector.cs" />
-    <Compile Include="Composites\ParallelSequence.cs" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Composites\" />
     <Folder Include="Actions\" />
     <Folder Include="Decorators\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Node.cs" />
+    <Compile Include="Composites\Sequence.cs" />
+    <Compile Include="Composites\ResumingSequence.cs" />
+    <Compile Include="Decorators\Inverter.cs" />
+    <Compile Include="Composites\Selector.cs" />
+    <Compile Include="Composites\ResumingSelector.cs" />
   </ItemGroup>
 </Project>
