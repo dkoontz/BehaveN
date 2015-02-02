@@ -4,8 +4,8 @@ using BehaveN;
 
 namespace Tests {
 	public class Mocks {
-		public static Dictionary<Node, Dictionary<string, object>> EmptyDictionary {
-			get { return new Dictionary<Node, Dictionary<string, object>>(); }
+		public static Dictionary<object, Dictionary<string, object>> EmptyDictionary {
+			get { return new Dictionary<object, Dictionary<string, object>>(); }
 		}
 
 		public static Node AlwaysSucceedsNode {
