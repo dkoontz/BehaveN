@@ -57,5 +57,6 @@
     <Compile Include="SequenceTests.cs" />
     <Compile Include="SelectorTests.cs" />
     <Compile Include="ResumingSelectorTests.cs" />
+    <Compile Include="ParallelTests.cs" />
   </ItemGroup>
 </Project>

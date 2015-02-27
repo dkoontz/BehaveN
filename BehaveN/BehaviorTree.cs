@@ -6,14 +6,12 @@ namespace BehaveN {
 	using NodeDictionary = Dictionary<object, Dictionary<string, object>>;
 
 	public static class BehaviorTree {
-		public static Func<Dictionary<string, object>> ObtainNodeState = () => new Dictionary<string, object>();
-		public static Action<Dictionary<string, object>> ReleaseNodeState = state => { };
 		
 		public static NodeStatus Run(Node node, NodeDictionary nodeDictionary) {
 			NodeState nodeState;
 			
 			if (!nodeDictionary.ContainsKey(node)) {
-				nodeState = ObtainNodeState();
+				nodeState = new Dictionary<string, object>();
 				node.OnInitialize(nodeDictionary, nodeState);
 				nodeDictionary[node] = nodeState;
 			}
@@ -25,13 +23,6 @@ namespace BehaveN {
 			
 			if (status == NodeStatus.Success) {
 				node.OnSuccess(nodeDictionary, nodeState);
-				nodeDictionary.Remove(node);
-			}
-			else if (status == NodeStatus.Failure) {
-				var state = nodeDictionary[node];
-				state.Clear();
-				nodeDictionary.Remove(node);
-				ReleaseNodeState(state);
 			}
 			
 			return status;

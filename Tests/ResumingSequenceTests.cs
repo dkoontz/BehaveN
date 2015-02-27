@@ -83,7 +83,7 @@ namespace Tests {
 		public void ResumingSequence_does_not_resume_on_failing_node() {
 			var sequence = ResumingSequence.Node(Mocks.AlwaysSucceedsNode, 
 												 Mocks.AlwaysSucceedsNode, 
-												 Mocks.FailOnceNode,
+												 Mocks.AlwaysFailsNode,
 												 Mocks.AlwaysRunningNode);
 			var dictionary = Mocks.EmptyDictionary;
 

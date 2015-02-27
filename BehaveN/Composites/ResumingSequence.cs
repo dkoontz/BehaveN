@@ -20,15 +20,13 @@
 
 				for (var i = index; i < nodes.Length; ++i) {
 					var status = BehaviorTree.Run(nodes[i], nodeDictionary);
-					if (status == NodeStatus.Running) {
+					if (status == NodeStatus.Running || status == NodeStatus.Failure) {
 						nodeState[CURRENT_INDEX] = i;
-						return status;
-					}
-					else if (status == NodeStatus.Failure) {
 						return status;
 					}
 				}
 
+				nodeState[CURRENT_INDEX] = 0;
 				return NodeStatus.Success;
 			};
 		}
