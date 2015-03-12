@@ -1,7 +1,9 @@
 ﻿using System;
 
 namespace BehaveN {
+	[BehaviorTreeNodeCollection]
 	public static class Selector {
+		[BehaviorTreeNode("Composite/Selector")]
 		public static Node Node(params Node[] nodes) {
 			return new Node {
 				OnTick = Tick(nodes)

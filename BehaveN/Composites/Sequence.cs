@@ -1,5 +1,7 @@
 ﻿namespace BehaveN {
+	[BehaviorTreeNodeCollection]
 	public static class Sequence {
+		[BehaviorTreeNode("Composite/Sequence")]
 		public static Node Node(params Node[] nodes) {
 			return new Node {
 				OnTick = Tick(nodes)

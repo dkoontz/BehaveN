@@ -1,5 +1,7 @@
 ﻿namespace BehaveN {
+	[BehaviorTreeNodeCollection]
 	public static class Inverter {
+		[BehaviorTreeNode("Decorator/Inverter")]
 		public static Node Node(Node child) {
 			return new Node {
 				OnInitialize = child.OnInitialize,

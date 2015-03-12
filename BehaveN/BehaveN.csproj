@@ -47,5 +47,6 @@
     <Compile Include="Composites\ResumingSelector.cs" />
     <Compile Include="BehaviorTree.cs" />
     <Compile Include="Composites\Parallel.cs" />
+    <Compile Include="Attributes.cs" />
   </ItemGroup>
 </Project>

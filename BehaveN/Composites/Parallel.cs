@@ -1,5 +1,7 @@
 ﻿namespace BehaveN {
+	[BehaviorTreeNodeCollection]
 	public static class Parallel {
+		[BehaviorTreeNode("Composite/Parallel")]
 		public static Node Node(params Node[] nodes) {
 			return new Node {
 				OnTick = Tick(nodes)

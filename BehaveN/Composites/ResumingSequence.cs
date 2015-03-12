@@ -1,8 +1,10 @@
 ﻿namespace BehaveN {
+	[BehaviorTreeNodeCollection]
 	public static class ResumingSequence {
 
 		const string CURRENT_INDEX = "CurrentIndex";
 
+		[BehaviorTreeNode("Composite/Resuming Sequence")]
 		public static Node Node(params Node[] nodes) {
 			return new Node {
 				OnInitialize = Init(),
